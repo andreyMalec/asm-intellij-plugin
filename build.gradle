@@ -1,12 +1,12 @@
 plugins {
     id 'java'
     id "org.jetbrains.intellij" version "1.17.3"
+    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
 }
 
 group 'org.objectweb.asm.idea.action'
 version '9.7' // Plugin version
 
-sourceCompatibility='1.8'
 
 repositories {
     mavenCentral()
@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'lib', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 tasks.withType(JavaCompile) {
@@ -22,10 +23,13 @@ tasks.withType(JavaCompile) {
 
 intellij {
     pluginName = 'ASM Bytecode Viewer'
-    version = '2023.2' // IntelliJ IDEA dependency
+    version = '2024.1.1' // IntelliJ IDEA dependency
     downloadSources = false
     updateSinceUntilBuild = false
 //    localPath = '/opt/idea-IC/'
-    sandboxDir = '.sandbox'
+//    sandboxDir = '.sandbox'
     plugins = ['com.intellij.java']
+}
+kotlin {
+    jvmToolchain(17)
 }
