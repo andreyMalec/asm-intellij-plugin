@@ -1,7 +1,7 @@
 package parser
 
 import org.junit.Test
-import org.objectweb.asm.idea.plugin.MEM
+import com.malec.turingcomplete.MEM
 import parser.base.ParserTest
 
 class IfTest : ParserTest() {

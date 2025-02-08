@@ -38,7 +38,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.objectweb.asm.idea.plugin.AsmParser;
+import com.malec.turingcomplete.parser.AsmParser;
 import org.objectweb.asm.idea.plugin.common.Constants;
 import org.objectweb.asm.idea.plugin.config.ASMPluginComponent;
 import org.objectweb.asm.idea.plugin.config.ApplicationConfig;

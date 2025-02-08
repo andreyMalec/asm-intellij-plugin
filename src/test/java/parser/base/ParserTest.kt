@@ -1,11 +1,13 @@
 package parser.base
 
+import com.malec.turingcomplete.ASM
+import com.malec.turingcomplete.AsmOptimizer
 import org.junit.Assert.assertEquals
-import org.objectweb.asm.idea.plugin.AsmParser
-import org.objectweb.asm.idea.plugin.MEM
+import com.malec.turingcomplete.parser.AsmParser
+import com.malec.turingcomplete.MEM
 
 abstract class ParserTest {
-    protected open val printForTestEdit: Boolean = true
+    protected open val printForTestEdit: Boolean = false
 
     protected fun printCode(asmCode: List<String>, originalCode: String? = null, printForTestEdit: Boolean = false) {
         println("")
@@ -42,12 +44,20 @@ abstract class ParserTest {
     ) {
         val p = AsmParser()
         val asm = if (optimize)
-            AsmParser.optimize(p.toAsmLines(bytecode))
+            AsmOptimizer.optimize(p.toAsmLines(bytecode))
         else
             p.toAsmLines(bytecode)
-        printCode(asm, originalCode, printForTestEdit)
+        val asmString = mutableListOf<String>()
+        asm.forEach {
+            if (it is ASM.RET) {
+                asmString.add(it.toString())
+                asmString.add("")
+            } else
+                asmString.add(it.toString())
+        }
+        printCode(asmString, originalCode, printForTestEdit)
 
-        assert(asmCode, asm)
+        assert(asmCode, asmString)
     }
 
     protected fun assert(expected: List<String>, actual: List<String>) {
