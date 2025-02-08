@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'org.objectweb.asm.idea.action'
-version '9.7' // Plugin version
+version '0.1' // Plugin version
 
 
 repositories {
@@ -22,7 +22,7 @@ tasks.withType(JavaCompile) {
 }
 
 intellij {
-    pluginName = 'ASM Bytecode Viewer'
+    pluginName = 'Symphony Assembly Viewer'
     version = '2024.1.1' // IntelliJ IDEA dependency
     downloadSources = false
     updateSinceUntilBuild = false

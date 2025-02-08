@@ -1,4 +1,8 @@
+package parser
+
 import org.junit.Test
+import org.objectweb.asm.idea.plugin.MEM
+import parser.base.ParserTest
 
 class RegUseTest : ParserTest() {
 
@@ -9,21 +13,31 @@ class RegUseTest : ParserTest() {
 
 	private val asmCode = listOf(
 		"main:",
+		"L0_main:",
 		"MOV r13, 13",
-		"STORE [0], r13",
+		"STORE [${0 * MEM}], r13",
+		"L1_main:",
 		"MOV r13, 7",
-		"STORE [1], r13",
-		"LOAD r1, [0]",
-		"STORE [1], r1",
-		"LOAD r2, [1]",
-		"STORE [2], r2",
+		"STORE [${1 * MEM}], r13",
+		"L2_main:",
+		"LOAD r1, [${0 * MEM}]",
+		"STORE [${1 * MEM}], r1",
+		"L3_main:",
+		"LOAD r2, [${1 * MEM}]",
+		"STORE [${2 * MEM}], r2",
+		"L4_main:",
 		"MOV r13, 12345",
-		"STORE [3], r13",
+		"STORE [${3 * MEM}], r13",
+		"L5_main:",
 		"MOV r13, 127",
-		"STORE [4], r13",
+		"STORE [${4 * MEM}], r13",
+		"L6_main:",
 		"MOV r13, 16383",
-		"STORE [5], r13",
-		"RET"
+		"STORE [${5 * MEM}], r13",
+		"L7_main:",
+		"RET",
+		"",
+		"L8_main:"
 	)
 
 	private val originalCode = """fun main() {

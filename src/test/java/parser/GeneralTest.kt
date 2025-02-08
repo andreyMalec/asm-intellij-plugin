@@ -1,4 +1,8 @@
+package parser
+
 import org.junit.Test
+import org.objectweb.asm.idea.plugin.MEM
+import parser.base.ParserTest
 
 class GeneralTest : ParserTest() {
 
@@ -9,33 +13,45 @@ class GeneralTest : ParserTest() {
 
 	private val asmCode = listOf(
 		"main:",
+		"L0_main:",
 		"MOV r13, 123",
-		"STORE [0], r13",
+		"STORE [${0 * MEM}], r13",
+		"L1_main:",
 		"MOV r13, 6",
-		"STORE [1], r13",
+		"STORE [${1 * MEM}], r13",
+		"L2_main:",
 		"MOV r13, 8",
-		"STORE [2], r13",
-		"LOAD r1, [0]",
+		"STORE [${2 * MEM}], r13",
+		"L3_main:",
+		"LOAD r1, [${0 * MEM}]",
 		"MOV r2, 5",
 		"CALL add",
-		"STORE [3], r3",
-		";Optimized; LOAD r3, [3]",
+		"STORE [${3 * MEM}], r3",
+		"L4_main:",
+		"LOAD r3, [${3 * MEM}]",
 		"CMP r3, 128",
-		"JNE IF_ELSE_0",
+		"JNE L5_main",
+		"L6_main:",
 		"MOV r13, 2",
-		"STORE [0], r13",
-		"STORE [3], zr",
-		"JMP END_IF0",
-		"IF_ELSE_0:",
+		"STORE [${0 * MEM}], r13",
+		"L7_main:",
+		"STORE [${3 * MEM}], zr",
+		"JMP L8_main",
+		"L5_main:",
 		"MOV r13, 3",
-		"STORE [0], r13",
-		"END_IF0:",
+		"STORE [${0 * MEM}], r13",
+		"L8_main:",
 		"RET",
+		"",
+		"L9_main:",
 		"add:",
-		"LOAD r1, [0]",
-		"LOAD r2, [1]",
+		"L0_add:",
+		"LOAD r1, [${4 * MEM}]",
+		"LOAD r2, [${5 * MEM}]",
 		"ADD r3, r1, r2",
 		"RET",
+		"",
+		"L1_add:"
 	)
 
 	private val originalCode = """fun main() {

@@ -1,7 +1,11 @@
+package parser
+
 import org.junit.Test
 import org.objectweb.asm.idea.plugin.AsmParser
+import parser.base.ParserTest
 
 class TestOptimize : ParserTest() {
+	//TODO номера строк сломали оптимизацию
 	@Test
 	fun test() {
 		val original = listOf(
@@ -15,6 +19,7 @@ class TestOptimize : ParserTest() {
 			"MOV r13, 2",
 			"STORE [0], r13",
 			"main:",
+			"L0_main:",
 			"CALL main",
 			"RET"
 		)

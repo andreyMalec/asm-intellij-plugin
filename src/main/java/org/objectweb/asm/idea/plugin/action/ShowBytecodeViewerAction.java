@@ -242,7 +242,8 @@ public class ShowBytecodeViewerAction extends AnAction {
 
             reader.accept(new TraceClassVisitor(new PrintWriter(stringWriter)), flags);
             AsmParser asmParser = new AsmParser();
-            bytecodeOutline.setCode(file, asmParser.toAsm(stringWriter.toString()));
+            String lines = asmParser.toAsm(stringWriter.toString());
+            bytecodeOutline.setCode(file, lines);
 
             toolWindowManager.getToolWindow(Constants.PLUGIN_WINDOW_NAME).activate(null);
         });

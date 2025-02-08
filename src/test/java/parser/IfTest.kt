@@ -1,52 +1,63 @@
-import org.junit.Ignore
+package parser
+
 import org.junit.Test
+import org.objectweb.asm.idea.plugin.MEM
+import parser.base.ParserTest
 
 class IfTest : ParserTest() {
 
-	@Test
-	fun test() {
-		check(originalCode, bytecode, asmCode)
-	}
+    @Test
+    fun test() {
+        check(originalCode, bytecode, asmCode)
+    }
 
-	private val asmCode = listOf(
-		"main:",
-		"MOV r13, 1",
-		"STORE [0], r13",
-		"LOAD r1, [0]",
-		"CMP r1, zr",
-		"JE IF_ELSE_0",
-		"STORE [0], zr",
-		"IF_ELSE_0:",
-		"LOAD r1, [0]",
-		"CMP r1, zr",
-		"JNE IF_ELSE_1",
-		"MOV r13, 1",
-		"STORE [0], r13",
-		"IF_ELSE_1:",
-		"LOAD r1, [0]",
-		"CMP r1, 1",
-		"JNE IF_ELSE_2",
-		"MOV r13, 1",
-		"STORE [0], r13",
-		"JMP END_IF2",
-		"IF_ELSE_2:",
-		"MOV r13, 2",
-		"STORE [0], r13",
-		"END_IF2:",
-		"LOAD r2, [0]",
-		"CMP r2, 5",
-		"JE IF_ELSE_3",
-		"MOV r13, 3",
-		"STORE [0], r13",
-		"JMP END_IF3",
-		"IF_ELSE_3:",
-		"MOV r13, 4",
-		"STORE [0], r13",
-		"END_IF3:",
-		"RET"
-	)
+    private val asmCode = listOf(
+        "main:",
+        "L0_main:",
+        "MOV r13, 1",
+        "STORE [${0 * MEM}], r13",
+        "L1_main:",
+        "LOAD r1, [${0 * MEM}]",
+        "CMP r1, zr",
+        "JE L2_main",
+        "L3_main:",
+        "STORE [${0 * MEM}], zr",
+        "L2_main:",
+        "LOAD r1, [${0 * MEM}]",
+        "CMP r1, zr",
+        "JNE L4_main",
+        "L5_main:",
+        "MOV r13, 1",
+        "STORE [${0 * MEM}], r13",
+        "L4_main:",
+        "LOAD r1, [${0 * MEM}]",
+        "CMP r1, 1",
+        "JNE L6_main",
+        "L7_main:",
+        "MOV r13, 1",
+        "STORE [${0 * MEM}], r13",
+        "JMP L8_main",
+        "L6_main:",
+        "MOV r13, 2",
+        "STORE [${0 * MEM}], r13",
+        "L8_main:",
+        "LOAD r2, [${0 * MEM}]",
+        "CMP r2, 5",
+        "JE L9_main",
+        "L10_main:",
+        "MOV r13, 3",
+        "STORE [${0 * MEM}], r13",
+        "JMP L11_main",
+        "L9_main:",
+        "MOV r13, 4",
+        "STORE [${0 * MEM}], r13",
+        "L11_main:",
+        "RET",
+        "",
+        "L12_main:"
+    )
 
-	private val originalCode = """fun main() {
+    private val originalCode = """fun main() {
 	var a = 1
 
 	if (a != 0)
@@ -67,7 +78,7 @@ class IfTest : ParserTest() {
 }
 """
 
-	private val bytecode = """// ================TestKt.class =================
+    private val bytecode = """// ================TestKt.class =================
 // class version 52.0 (52)
 // access flags 0x31
 public final class TestKt {
