@@ -1,10 +1,5 @@
 package com.malec.turingcomplete
 
-import com.malec.turingcomplete.Argument.Address
-import com.malec.turingcomplete.Argument.Value
-import com.malec.turingcomplete.Argument.Register
-import com.malec.turingcomplete.parser.AsmParser
-
 sealed interface Argument {
     open class Register(val index: Int) : Argument {
         override fun toString(): String {
@@ -32,10 +27,13 @@ sealed interface Argument {
         object FLAGS : Register(15)
     }
 
-    data class Value(val value: Any) : Argument {
-        override fun toString(): String {
+    sealed class Value(open val value: Any) : Argument {
+        final override fun toString(): String {
             return value.toString()
         }
+
+        data class Label(val name: String) : Value(name)
+        data class Number(override val value: Int) : Value(value)
     }
 
     data class Address(val value: Int) : Argument {
@@ -49,25 +47,4 @@ sealed interface Argument {
             val dot = indexOf(".").takeIf { it > 0 }?.plus(1) ?: 0
             return substring(dot)
         }
-}
-
-inline fun AsmParser.label(label: String): Value {
-    return Value("${label}_$currentFunName")
-}
-
-inline fun AsmParser.address(value: String): Address {
-    return Address((value.toInt() + varCount) * MEM)
-}
-
-inline fun AsmParser.value(value: String): Value {
-    return Value(value)
-}
-
-inline fun AsmParser.register(index: Int): Register {
-    return Register(index)
-}
-
-inline fun AsmParser.functionName(name: String): Value {
-    val dot = name.indexOf(".").takeIf { it > 0 }?.plus(1) ?: 0
-    return Value(name.substring(dot))
 }
