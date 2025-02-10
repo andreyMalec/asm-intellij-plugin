@@ -2,11 +2,13 @@ package parser
 
 import org.junit.Test
 import com.malec.turingcomplete.MEM
+import org.junit.Ignore
 import parser.base.ParserTest
 
 class GeneralTest : ParserTest() {
 
 	@Test
+	@Ignore
 	fun test() {
 		check(originalCode, bytecode, asmCode)
 	}

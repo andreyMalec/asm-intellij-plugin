@@ -13,12 +13,12 @@ class ImmutableStack<T>() {
     fun peek() = stack.peek()
 
     fun peek2(): Pair<T, T> {
-        val a=stack[stack.lastIndex - 1] to stack[stack.lastIndex]
+        val a = stack[stack.lastIndex - 1] to stack[stack.lastIndex]
         return a
     }
 
     fun push(item: T): ImmutableStack<T> {
-        val s = ImmutableStack<T>()
+        val s = ImmutableStack(this)
         s.stack.push(item)
         return s
     }
