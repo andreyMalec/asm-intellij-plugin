@@ -1,7 +1,6 @@
 out
 .idea
 .gradle
-gradle
 gradlew
 gradlew.bat
 .sandbox
