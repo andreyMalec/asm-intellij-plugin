@@ -10,6 +10,7 @@ sealed interface ParserAction {
     data object ClearArgs : ParserAction
     data object HandleInvoke : ParserAction
     data object InvokeHandled : ParserAction
+    data object DropLastInstruction : ParserAction
     data class AddVarCount(val add: Int) : ParserAction
     data class AddRegCount(val add: Int) : ParserAction
     data class Instruction(val instruction: ASM) : ParserAction

@@ -17,6 +17,10 @@ class ImmutableStack<T>() {
         return a
     }
 
+    fun peek(count: Int): List<T> {
+        return stack.takeLast(count)
+    }
+
     fun push(item: T): ImmutableStack<T> {
         val s = ImmutableStack(this)
         s.stack.push(item)

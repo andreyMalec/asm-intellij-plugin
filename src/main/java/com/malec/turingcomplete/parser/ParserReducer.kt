@@ -11,6 +11,10 @@ object ParserReducer {
                 asm = asm + action.instructions
             )
 
+            is ParserAction.DropLastInstruction -> copy(
+                asm = asm.dropLast(1)
+            )
+
             is ParserAction.AddRegCount -> copy(
                 reg = reg + action.add
             )

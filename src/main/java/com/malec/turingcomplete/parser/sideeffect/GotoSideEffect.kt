@@ -1,6 +1,6 @@
 package com.malec.turingcomplete.parser.sideeffect
 
-import com.malec.turingcomplete.ASM.*
+import com.malec.turingcomplete.ASM.JMP
 import com.malec.turingcomplete.parser.ParserAction
 import com.malec.turingcomplete.parser.SideEffect
 

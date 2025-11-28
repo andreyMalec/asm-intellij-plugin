@@ -8,43 +8,76 @@ import parser.base.ParserTest
 class FunctionTest : ParserTest() {
 
     @Test
-    @Ignore
     fun test() {
         check(originalCode, bytecode, asmCode)
     }
 
     private val asmCode = listOf(
         "main:",
-        "MOV r13, 1",
+        "L0_main:",
+        "CALL input",
         "STORE [${0 * MEM}], r13",
-        "MOV r13, 2",
+        "L1_main:",
+        "CALL input",
         "STORE [${1 * MEM}], r13",
+        "L2_main:",
         "LOAD r1, [${0 * MEM}]",
         "LOAD r2, [${1 * MEM}]",
-        "ADD r3, r1, r2",
-        "STORE [${2 * MEM}], r3",
+        "CALL add",
+        "STORE [${2 * MEM}], r13",
+        "L3_main:",
+        "MOV r1, 5",
+        "MOV r2, 3",
+        "CALL add",
+        "STORE [${3 * MEM}], r13",
+        "L4_main:",
+        "LOAD r1, [${2 * MEM}]",
+        "CALL output",
+        "L5_main:",
         "LOAD r1, [${0 * MEM}]",
-        "LOAD r2, [${1 * MEM}]",
-        "SUB r3, r1, r2",
-        "STORE [${3 * MEM}], r3",
-        "MOV r13, 2",
+        "CALL output",
+        "L6_main:",
+        "RET",
+        "",
+        "L7_main:",
+        "input:",
+        "L0_input:",
+        "MOV r13, 123",
         "STORE [${4 * MEM}], r13",
-        ";Optimized; LOAD r13, [${4 * MEM}]",
-        "ADD r13, 1",
-        "STORE [${4 * MEM}], r13",
-        ";Optimized; LOAD r13, [${4 * MEM}]",
-        "ADD r13, 2",
-        "STORE [${4 * MEM}], r13",
-        ";Optimized; LOAD r13, [${4 * MEM}]",
-        "ADD r13, -3",
-        "STORE [${4 * MEM}], r13",
-        "RET"
+        "L1_input:",
+        "MOV r13, 5",
+        "STORE [${5 * MEM}], r13",
+        "L2_input:",
+        "LOAD r13, [${4 * MEM}]",
+        "RET",
+        "",
+        "L3_input:",
+        "output:",
+        "L0_output:",
+        "RET",
+        "",
+        "L1_output:",
+        "add:",
+        "L0_add:",
+        "LOAD r1, [${7 * MEM}]",
+        "LOAD r2, [${8 * MEM}]",
+        "ADD r13, r1, r2",
+        "RET",
+        "",
+        "L1_add:",
+        "main:",
+        "L0_main:",
+        "CALL main",
+        "RET",
+        "",
+        "L1_main:"
     )
 
     private val originalCode = """fun main() {
     var x = input()
     val y = input()
     var i = add(x, y)
+    var c = add(5, 3)
 
     output(i)
     output(x)
@@ -90,36 +123,43 @@ public final class TestKt {
     INVOKESTATIC TestKt.add (II)I
     ISTORE 2
    L3
-    LINENUMBER 6 L3
-    ILOAD 2
-    INVOKESTATIC TestKt.output (I)V
+    LINENUMBER 5 L3
+    ICONST_5
+    ICONST_3
+    INVOKESTATIC TestKt.add (II)I
+    ISTORE 3
    L4
     LINENUMBER 7 L4
-    ILOAD 0
+    ILOAD 2
     INVOKESTATIC TestKt.output (I)V
    L5
     LINENUMBER 8 L5
+    ILOAD 0
+    INVOKESTATIC TestKt.output (I)V
+   L6
+    LINENUMBER 9 L6
     NOP
     RETURN
-   L6
-    LOCALVARIABLE x I L1 L6 0
-    LOCALVARIABLE y I L2 L6 1
-    LOCALVARIABLE i I L3 L6 2
+   L7
+    LOCALVARIABLE x I L1 L7 0
+    LOCALVARIABLE y I L2 L7 1
+    LOCALVARIABLE i I L3 L7 2
+    LOCALVARIABLE c I L4 L7 3
     MAXSTACK = 2
-    MAXLOCALS = 3
+    MAXLOCALS = 4
 
   // access flags 0x19
   public final static input()I
    L0
-    LINENUMBER 11 L0
+    LINENUMBER 12 L0
     BIPUSH 123
     ISTORE 0
    L1
-    LINENUMBER 12 L1
+    LINENUMBER 13 L1
     ICONST_5
     ISTORE 1
    L2
-    LINENUMBER 13 L2
+    LINENUMBER 14 L2
     ILOAD 0
     IRETURN
    L3
@@ -131,7 +171,7 @@ public final class TestKt {
   // access flags 0x19
   public final static output(I)V
    L0
-    LINENUMBER 17 L0
+    LINENUMBER 18 L0
     NOP
     RETURN
    L1
@@ -142,7 +182,7 @@ public final class TestKt {
   // access flags 0x19
   public final static add(II)I
    L0
-    LINENUMBER 20 L0
+    LINENUMBER 21 L0
     ILOAD 0
     ILOAD 1
     IADD

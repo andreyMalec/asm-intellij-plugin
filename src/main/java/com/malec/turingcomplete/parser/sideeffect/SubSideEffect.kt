@@ -2,6 +2,7 @@ package com.malec.turingcomplete.parser.sideeffect
 
 import com.malec.turingcomplete.ASM.SUB
 import com.malec.turingcomplete.Argument
+import com.malec.turingcomplete.parser.AsmParser.Companion.movReg
 import com.malec.turingcomplete.parser.ParserAction
 import com.malec.turingcomplete.parser.SideEffect
 
@@ -10,7 +11,7 @@ class SubSideEffect : SideEffect(
         statement[0] == "ISUB"
     },
     effect = { _ ->
-        val dst = register(reg)
+        val dst = movReg
         val (a, b) = arguments.peek2()
         if (a !is Argument.Register)
             throw IllegalArgumentException()

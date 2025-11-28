@@ -3,8 +3,11 @@ package com.malec.turingcomplete.parser.sideeffect
 import com.malec.turingcomplete.ASM.CALL
 import com.malec.turingcomplete.ASM.MOV
 import com.malec.turingcomplete.Argument
+import com.malec.turingcomplete.parser.AsmParser.Companion.movReg
 import com.malec.turingcomplete.parser.ParserAction
 import com.malec.turingcomplete.parser.SideEffect
+
+private val regex = Regex("\\((\\D*)\\)(\\D)")
 
 class InvokeSideEffect : SideEffect(
     query = { statement ->
@@ -13,17 +16,25 @@ class InvokeSideEffect : SideEffect(
     effect = { statement ->
         val actions = mutableListOf<ParserAction>()
 
-        val argCount = statement[2].indexOf(')') - 1
-        val retCount = statement[2].length - statement[2].indexOf(')')
-        if (argCount > 0 && arguments.isNotEmpty && arguments.peek() is Argument.Value) {
-            val arg = arguments.peek()
-            actions.add(ParserAction.Pop)
-            actions.add(ParserAction.Instruction(MOV(register(reg), arg)))
-            actions.add(ParserAction.AddRegCount(1))
+        val signature = regex.find(statement.last())?.groups!!
+        val argCount = signature[1]!!.value.length
+        val retCount = if (signature[2]?.value == "V") 0 else 1
+        if (argCount > 0 && arguments.size > 0) {
+            val args = arguments.peek(argCount)
+            var r = reg
+            args.forEach {
+                actions.add(ParserAction.Pop)
+                if (it is Argument.Value) {
+                    actions.add(ParserAction.Instruction(MOV(register(r), it)))
+                    r++
+                } else {
+                    actions.add(ParserAction.AddRegCount(-1))
+                }
+            }
         }
         actions.add(ParserAction.Instruction(CALL(functionName(statement[1]))))
         if (retCount > 0)
-            actions.add(ParserAction.Push(register(reg - 1)))
+            actions.add(ParserAction.Push(movReg))
 
         actions.add(ParserAction.InvokeHandled)
         actions
